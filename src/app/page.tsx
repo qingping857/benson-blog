@@ -2,6 +2,7 @@
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 
 export default function Home() {
   // 添加打字动画的状态
@@ -45,38 +46,43 @@ export default function Home() {
     {
       video: '/videos/video1.mp4',
       isVideo: true,
-      overlay: 'bg-black/30',
-      showTypingText: true, // 新增标识符
+      overlay: 'bg-black/60',
+      showTypingText: true,
     },
     {
       image: '/images/image2.png',
       title: 'LIFE, DANCE',
       subtitle: '我的生活',
       overlay: 'bg-black/30',
+      link: '/life',
     },
     {
       image: '/images/image3.jpg',
       title: 'STAR ME',
       subtitle: '精神领袖',
       overlay: 'bg-black/30',
+      link: '/star',
     },
     {
       image: '/images/image4.jpg',
       title: 'PERFECT PROJECTS',
       subtitle: '我做过的项目',
       overlay: 'bg-black/30',
+      link: '/projects',
     },
     {
       image: '/images/image5.jpg',
       title: 'MY GIRLFRIENDS',
       subtitle: '亲密关系',
       overlay: 'bg-black/50',
+      link: '/relationships',
     },
     {
       image: '/images/image6.jpg',
       title: 'WHAT AM I DOING?',
       subtitle: '我最近在干啥？',
       overlay: 'bg-black/50',
+      link: '/current',
     },
   ];
 
@@ -136,7 +142,7 @@ export default function Home() {
           
           <div className={`absolute inset-0 ${section.overlay}`} />
           
-          {/* 文字容器 - 只在非视频部分显示 */}
+          {/* 文字容器和按钮 - 只在非视频部分显示 */}
           {!section.isVideo && (
             <motion.div 
               className="absolute bottom-20 left-20 z-10"
@@ -150,38 +156,59 @@ export default function Home() {
                 stiffness: 100
               }}
             >
-              <motion.h3 
-                className="text-sm font-light tracking-[0.2em] mb-2 text-gray-300"
-                initial={{ y: 20, opacity: 0 }}
-                whileInView={{ y: 0, opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 0.8 }}
-              >
-                {section.title}
-              </motion.h3>
-              
-              <motion.h2 
-                className="text-5xl font-bold tracking-wide"
-                initial={{ y: 40, opacity: 0 }}
-                whileInView={{ y: 0, opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 1 }}
-              >
-                {section.subtitle}
-              </motion.h2>
+              <div className="flex items-end gap-8">
+                <div>
+                  <motion.h3 
+                    className="text-sm font-light tracking-[0.2em] mb-2 text-gray-300"
+                    initial={{ y: 20, opacity: 0 }}
+                    whileInView={{ y: 0, opacity: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6, delay: 0.8 }}
+                  >
+                    {section.title}
+                  </motion.h3>
+                  
+                  <motion.h2 
+                    className="text-5xl font-bold tracking-wide"
+                    initial={{ y: 40, opacity: 0 }}
+                    whileInView={{ y: 0, opacity: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6, delay: 1 }}
+                  >
+                    {section.subtitle}
+                  </motion.h2>
 
-              <motion.div 
-                className="h-[2px] w-0 bg-white mt-4"
-                initial={{ width: 0 }}
-                whileInView={{ width: "100px" }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8, delay: 1.2 }}
-              />
+                  <motion.div 
+                    className="h-[2px] w-0 bg-white mt-4"
+                    initial={{ width: 0 }}
+                    whileInView={{ width: "100px" }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.8, delay: 1.2 }}
+                  />
+                </div>
+
+                {/* 添加跳转按钮 */}
+                <Link href={section.link}>
+                  <motion.button
+                    className="group relative px-8 py-3 bg-transparent border-2 border-white rounded-full overflow-hidden hover:text-black transition-colors duration-300"
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6, delay: 1.4 }}
+                    whileHover={{ scale: 1.05 }}
+                  >
+                    {/* 按钮背景动画 */}
+                    <span className="absolute inset-0 w-0 bg-white group-hover:w-full transition-all duration-300 ease-out" />
+                    {/* 按钮文字 */}
+                    <span className="relative">了解更多</span>
+                  </motion.button>
+                </Link>
+              </div>
             </motion.div>
           )}
 
-          {/* 滚动提示 (只在第一屏显示) */}
-          {index === 0 && (
+          {/* 滚动提示 (在除最后一张外的所有部分显示) */}
+          {index !== sections.length - 1 && (
             <motion.div 
               className="absolute bottom-10 left-1/2 transform -translate-x-1/2 flex flex-col items-center text-sm"
               initial={{ opacity: 0, y: -20 }}
